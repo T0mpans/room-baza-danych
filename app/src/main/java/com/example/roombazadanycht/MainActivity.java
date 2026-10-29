@@ -18,17 +18,19 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     SzkolaDataBase szkolaDataBase;
-    Button button;
+    Button button, buttonAktualizuj;
     EditText editText;
     Spinner spinner;
     ListView listView;
     List<Nauczyciel> nauczycielList;
     ArrayAdapter<Nauczyciel> arrayAdapter;
+    Nauczyciel kliknietyNauczyciel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
                 new Nauczyciel("Anna", "matematyka")
         );*/
         button = findViewById(R.id.button);
+        buttonAktualizuj = findViewById(R.id.buttonAktualizacja);
         editText = findViewById(R.id.editTextTextPersonName);
         spinner = findViewById(R.id.spinner);
         listView = findViewById(R.id.listView);
@@ -73,6 +76,29 @@ public class MainActivity extends AppCompatActivity {
                         nauczycielList.remove(nauczycielList.get(i));
                         arrayAdapter.notifyDataSetChanged();
                         return false;
+                    }
+                }
+        );
+        listView.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        kliknietyNauczyciel = nauczycielList.get(i);
+                        //wypelniony formularz
+                        editText.setText(kliknietyNauczyciel.imie);
+                        ArrayList<String> przedmioty = new ArrayList<>(
+                                Arrays.asList("wf","plastyka" ,"informatyka" ,"programowanie" ,"fizyka" ,"język angielski","język chiński")
+                        );
+                        spinner.setSelection(przedmioty.indexOf(kliknietyNauczyciel.przedmiot));
+                        buttonAktualizuj.setVisibility(View.VISIBLE);
+                    }
+                }
+        );
+        buttonAktualizuj.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        szkolaDataBase.getNauczycielDAO().zaktualizujDaneNauczyciela(nauczycielList.get(i));
                     }
                 }
         );
