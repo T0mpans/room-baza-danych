@@ -98,7 +98,11 @@ public class MainActivity extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        szkolaDataBase.getNauczycielDAO().zaktualizujDaneNauczyciela(nauczycielList.get(i));
+                        kliknietyNauczyciel.imie = editText.getText().toString();
+                        kliknietyNauczyciel.przedmiot = spinner.getSelectedItem().toString();
+                        szkolaDataBase.getNauczycielDAO().zaktualizujDaneNauczyciela(kliknietyNauczyciel);
+                        buttonAktualizuj.setVisibility(View.INVISIBLE);
+                        arrayAdapter.notifyDataSetChanged();
                     }
                 }
         );
